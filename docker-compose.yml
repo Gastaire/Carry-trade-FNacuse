@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  carry-trade-calculator:
+    build: .
+    container_name: carry-trade-calculator
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    
+    # Security settings
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.5'
+        reservations:
+          memory: 64M
+          cpus: '0.25'
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Labels for Dokploy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.carry-trade.rule=Host(`finanzasnetwork.xyz`) || Host(`www.finanzasnetwork.xyz`)"
+      - "traefik.http.routers.carry-trade.entrypoints=websecure"
+      - "traefik.http.routers.carry-trade.tls.certresolver=letsencrypt"
+      - "traefik.http.services.carry-trade.loadbalancer.server.port=80"
+      
+      # Redirect www to non-www
+      - "traefik.http.routers.carry-trade-www.rule=Host(`www.finanzasnetwork.xyz`)"
+      - "traefik.http.routers.carry-trade-www.entrypoints=websecure"
+      - "traefik.http.routers.carry-trade-www.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.carry-trade-www.middlewares=redirect-to-non-www"
+      - "traefik.http.middlewares.redirect-to-non-www.redirectregex.regex=^https://www\\.(.+)"
+      - "traefik.http.middlewares.redirect-to-non-www.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.redirect-to-non-www.redirectregex.permanent=true"
+
+networks:
+  default:
+    name: dokploy-network
+    external: true

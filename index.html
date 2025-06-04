@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Carry Trade 🇦🇷 - FinanzasNetwork</title>
+    <meta name="description" content="Calculadora de Carry Trade para operaciones ARS/USD. Calcula la rentabilidad de tu inversión considerando tasas de interés, tipo de cambio e inflación.">
+    <meta name="keywords" content="carry trade, calculator, ARS, USD, finanzas, argentina, inversión">
+    <meta name="author" content="@felinacu">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://finanzasnetwork.xyz/">
+    <meta property="og:title" content="Calculadora de Carry Trade 🇦🇷">
+    <meta property="og:description" content="Calculadora de Carry Trade para operaciones ARS/USD">
+    <meta property="og:image" content="https://finanzasnetwork.xyz/favicon.ico">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://finanzasnetwork.xyz/">
+    <meta property="twitter:title" content="Calculadora de Carry Trade 🇦🇷">
+    <meta property="twitter:description" content="Calculadora de Carry Trade para operaciones ARS/USD">
+    <meta property="twitter:image" content="https://finanzasnetwork.xyz/favicon.ico">
+
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.tailwindcss.com; img-src 'self' data:; connect-src 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Stylesheets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="container bg-white rounded-xl shadow-lg p-8 space-y-6">
+        <header>
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">
+                Calculadora de Carry Trade 🇦🇷
+            </h1>
+            <h2 class="text-xl font-medium text-center text-gray-600 mb-6">
+                @felinacu
+            </h2>
+        </header>
+
+        <nav class="space-y-2">
+            <button type="button" id="whatIsCarryTradeLink" class="info-link" aria-label="Información sobre qué es el Carry Trade">
+                ¿Qué es el Carry Trade?
+            </button>
+            <button type="button" id="whatIsCalculatorForLink" class="info-link" aria-label="Información sobre para qué sirve la calculadora">
+                ¿Para qué sirve la Calculadora de Carry Trade?
+            </button>
+        </nav>
+
+        <main>
+            <form id="carryTradeForm" novalidate>
+                <div class="space-y-6">
+                    <div>
+                        <label for="usdAmount" class="block text-gray-700 text-sm font-medium mb-2">
+                            Monto en Dólares (USD) 💵
+                            <button type="button" class="help-icon" data-info="Ingresa el monto inicial de dinero en dólares que deseas invertir en la operación de Carry Trade." aria-label="Ayuda para monto en dólares">?</button>
+                        </label>
+                        <input type="number" id="usdAmount" value="1000" min="0.01" step="0.01" required 
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                               aria-describedby="usdAmount-error">
+                        <div id="usdAmount-error" class="error-message" role="alert"></div>
+                    </div>
+
+                    <div>
+                        <label for="exchangeRateARS" class="block text-gray-700 text-sm font-medium mb-2">
+                            Tipo de Cambio (ARS/USD)
+                            <button type="button" class="help-icon" data-info="Ingresa el tipo de cambio actual de Pesos Argentinos por cada Dólar Estadounidense al inicio de la operación." aria-label="Ayuda para tipo de cambio">?</button>
+                        </label>
+                        <input type="number" id="exchangeRateARS" value="1000" min="0.01" step="0.01" required 
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                               aria-describedby="exchangeRateARS-error">
+                        <div id="exchangeRateARS-error" class="error-message" role="alert"></div>
+                    </div>
+
+                    <div>
+                        <label for="interestRate" class="block text-gray-700 text-sm font-medium mb-2">
+                            Tasa de Interés Anual (%) 📈
+                            <button type="button" class="help-icon" data-info="Ingresa la tasa de interés anual que se aplicará a tu inversión en pesos. Por ejemplo, si es 60%, ingresa 60." aria-label="Ayuda para tasa de interés">?</button>
+                        </label>
+                        <input type="number" id="interestRate" value="60" min="0" step="0.01" required 
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                               aria-describedby="interestRate-error">
+                        <div id="interestRate-error" class="error-message" role="alert"></div>
+                    </div>
+
+                    <fieldset>
+                        <legend class="block text-gray-700 text-sm font-medium mb-2">
+                            Período de Interés:
+                            <button type="button" class="help-icon" data-info="El período de interés define por cuánto tiempo se aplicará la 'Tasa de Interés Anual'. Si eliges 'Diario', la tasa anual se ajusta a días y se multiplica por el 'Número de Días' que indiques. Si eliges 'Mensual', la tasa anual se ajusta a meses y se multiplica por el 'Número de Meses'." aria-label="Ayuda para período de interés">?</button>
+                        </legend>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="flex items-center">
+                                <input type="radio" id="daily" name="interestPeriod" value="daily" checked 
+                                       class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                <label for="daily" class="ml-2 text-gray-700 text-sm">Diario</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="monthly" name="interestPeriod" value="monthly" 
+                                       class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                <label for="monthly" class="ml-2 text-gray-700 text-sm">Mensual</label>
+                            </div>
+                        </div>
+
+                        <div id="daysInputContainer" class="hidden-input">
+                            <label for="numDays" class="block text-gray-700 text-sm font-medium mb-2">
+                                Número de Días 🗓️
+                                <button type="button" class="help-icon" data-info="Si la tasa es diaria, especifica el número de días que durará la inversión." aria-label="Ayuda para número de días">?</button>
+                            </label>
+                            <input type="number" id="numDays" value="30" min="1" step="1" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                                   aria-describedby="numDays-error">
+                            <div id="numDays-error" class="error-message" role="alert"></div>
+                        </div>
+
+                        <div id="monthsInputContainer" class="hidden-input">
+                            <label for="numMonths" class="block text-gray-700 text-sm font-medium mb-2">
+                                Número de Meses
+                                <button type="button" class="help-icon" data-info="Si la tasa es mensual, especifica el número de meses que durará la inversión." aria-label="Ayuda para número de meses">?</button>
+                            </label>
+                            <input type="number" id="numMonths" value="1" min="1" step="1" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                                   aria-describedby="numMonths-error">
+                            <div id="numMonths-error" class="error-message" role="alert"></div>
+                        </div>
+                    </fieldset>
+
+                    <div>
+                        <label for="finalExchangeRateARS" class="block text-gray-700 text-sm font-medium mb-2">
+                            Tipo de Cambio Final (ARS/USD)
+                            <button type="button" class="help-icon" data-info="Ingresa el tipo de cambio estimado de Pesos Argentinos por cada Dólar Estadounidense al finalizar la operación." aria-label="Ayuda para tipo de cambio final">?</button>
+                        </label>
+                        <input type="number" id="finalExchangeRateARS" value="1100" min="0.01" step="0.01" required 
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                               aria-describedby="finalExchangeRateARS-error">
+                        <div id="finalExchangeRateARS-error" class="error-message" role="alert"></div>
+                    </div>
+
+                    <div>
+                        <label for="annualInflation" class="block text-gray-700 text-sm font-medium mb-2">
+                            Inflación Anual Estimada de USA 🇺🇸
+                            <button type="button" class="help-icon" data-info="Ingresa la tasa de inflación anual estimada en dólares (USA). Este valor se usará para ajustar la ganancia/pérdida real de tu inversión." aria-label="Ayuda para inflación anual">?</button>
+                        </label>
+                        <input type="number" id="annualInflation" value="0" min="0" step="0.01" required 
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                               aria-describedby="annualInflation-error">
+                        <div id="annualInflation-error" class="error-message" role="alert"></div>
+                    </div>
+                </div>
+
+                <button type="submit" id="calculateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 mt-6">
+                    Calcular
+                </button>
+            </form>
+        </main>
+
+        <section class="mt-8 p-6 bg-gray-50 rounded-lg shadow-inner" aria-live="polite">
+            <div class="mb-4">
+                <p class="text-gray-700 text-lg font-medium mb-2">
+                    Monto Final en Dólares (sin inflación):
+                </p>
+                <div class="flex items-baseline mb-4">
+                    <p id="finalUsdAmount" class="text-2xl font-bold text-gray-900">$ 0.00</p>
+                    <span id="finalUsdAmountPercentage" class="percentage-display"></span>
+                </div>
+
+                <p class="text-gray-700 text-lg font-medium mb-2">Ganancia/Pérdida (USD) (sin inflación):</p>
+                <p id="profitLoss" class="text-2xl font-bold text-gray-900">$ 0.00</p>
+            </div>
+
+            <hr class="my-4 border-gray-300">
+
+            <div>
+                <p class="text-gray-700 text-lg font-medium mb-2">
+                    Monto Final en Dólares (Ajustado por Inflación):
+                </p>
+                <div class="flex items-baseline mb-4">
+                    <p id="finalUsdAmountAfterInflation" class="text-2xl font-bold text-gray-900">$ 0.00</p>
+                    <span id="finalUsdAmountAfterInflationPercentage" class="percentage-display"></span>
+                </div>
+
+                <p class="text-gray-700 text-lg font-medium mb-2">Ganancia/Pérdida (USD) (Ajustada por Inflación):</p>
+                <p id="profitLossAfterInflation" class="text-2xl font-bold text-gray-900">$ 0.00</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="explanationModalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <button type="button" id="modalCloseBtn" class="modal-close-btn" aria-label="Cerrar modal">&times;</button>
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-3">Explicación</h3>
+            <div id="modalText" class="text-gray-700"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

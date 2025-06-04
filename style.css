@@ -1,0 +1,280 @@
+/* Custom styles for Carry Trade Calculator */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+}
+
+input[type="number"], select {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+input:invalid {
+    border-color: #ef4444;
+}
+
+input:invalid:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%;
+    border: none;
+}
+
+button:hover:not(:disabled) {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.result-text {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.positive {
+    color: #10b981; /* Green */
+}
+
+.negative {
+    color: #ef4444; /* Red */
+}
+
+/* Hide number inputs by default */
+.hidden-input {
+    display: none;
+}
+
+.help-icon {
+    display: inline-block;
+    margin-left: 8px;
+    background-color: #e0e7ff;
+    color: #3b82f6;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+    transition: background-color 0.2s;
+    border: none;
+}
+
+.help-icon:hover {
+    background-color: #bfdbfe;
+}
+
+.help-icon:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease-in-out;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    width: auto;
+}
+
+.modal-close-btn:hover {
+    color: #6b7280;
+}
+
+.modal-close-btn:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.percentage-display {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    margin-left: 10px;
+}
+
+.info-link {
+    display: block;
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 1.125rem; /* text-lg */
+    color: #3b82f6;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    width: auto;
+}
+
+.info-link:hover {
+    color: #2563eb;
+}
+
+.info-link:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    min-height: 1.25rem;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        max-width: 90%;
+    }
+    
+    input[type="number"], select {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}
+
+/* Print styles */
+@media print {
+    .modal-overlay {
+        display: none;
+    }
+    
+    .help-icon {
+        display: none;
+    }
+    
+    .info-link {
+        display: none;
+    }
+    
+    button {
+        display: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .container {
+        border: 2px solid #000;
+    }
+    
+    input[type="number"], select {
+        border: 2px solid #000;
+    }
+    
+    button {
+        border: 2px solid #000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
